@@ -1,0 +1,20 @@
+{
+  "id": "fal-clarity",
+  "name": "Clarity \u00b7 quality upscale",
+  "provider": "fal",
+  "operation": "upscale",
+  "model": "fal-ai/clarity-upscaler",
+  "inputs": {
+    "upscale_factor": 2,
+    "creativity": 0.2,
+    "resemblance": 0.8
+  },
+  "bindings": {
+    "prompt": "prompt",
+    "image": "image_url",
+    "scale": "upscale_factor",
+    "denoise": "creativity",
+    "seed": "seed"
+  },
+  "source": "https://fal.ai/models/fal-ai/clarity-upscaler/api"
+}

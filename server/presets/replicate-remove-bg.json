@@ -1,0 +1,13 @@
+{
+  "id": "replicate-remove-bg",
+  "name": "Remove background",
+  "provider": "replicate",
+  "operation": "cutout",
+  "model": "lucataco/remove-bg",
+  "inputs": {},
+  "bindings": {
+    "image": "image"
+  },
+  "resolve_version": true,
+  "source": "https://replicate.com/lucataco/remove-bg/api"
+}

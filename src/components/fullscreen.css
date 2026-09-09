@@ -1,0 +1,2 @@
+.fullscreen-control { display: inline-flex; align-items: center; gap: 8px; }
+.fullscreen-error { max-width: 260px; font-size: 11px; line-height: 1.4; color: var(--danger, #dd7272); }

@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import ts from 'typescript';
+
+const source=readFileSync(new URL('../src/components/canvasGeometry.ts',import.meta.url),'utf8');
+const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;
+const {rotateLayers,layerCorners,readTransformedLayer}=await import(`data:text/javascript;base64,${Buffer.from(js).toString('base64')}`);
+const layer={id:'a',name:'Test',kind:'image',x:10,y:20,width:100,height:60,rotation:0,opacity:1,visible:true,flipX:true};
+const near=(actual,expected)=>assert.ok(Math.abs(actual-expected)<1e-8,`${actual} != ${expected}`);
+const layers=[layer,{...layer,id:'b',x:210,rotation:25}];
+const rotated=rotateLayers(layers,{x:160,y:50},90);
+near(rotated[0].x,190);near(rotated[0].y,-100);
+near(Math.hypot(rotated[1].x-rotated[0].x,rotated[1].y-rotated[0].y),200);
+assert.equal(rotated[1].rotation,115);assert.equal(rotated[0].flipX,true);
+const restored=rotateLayers(rotated,{x:160,y:50},-90);
+layers.forEach((item,i)=>{near(restored[i].x,item.x);near(restored[i].y,item.y)});
+const corners=layerCorners({...layer,rotation:90});near(corners[2].x,-50);near(corners[2].y,120);
+let sx=-2,sy=3;
+const transformed=readTransformedLayer({...layer,strokes:[{points:[10,20],size:4,color:'#fff',feather:2}]},{width:()=>100,height:()=>60,scaleX:v=>v===undefined?sx:(sx=v),scaleY:v=>v===undefined?sy:(sy=v),rotation:()=>90,x:()=>70,y:()=>220});
+near(transformed.x,70);near(transformed.y,20);assert.equal(transformed.width,200);assert.equal(transformed.height,180);assert.equal(transformed.flipX,true);assert.deepEqual(transformed.strokes[0].points,[20,60]);assert.equal(transformed.strokes[0].size,8);assert.equal(sx,-1);assert.equal(sy,1);
+console.log('Canvas geometry: group rotation, flipped resize, and stroke scaling passed.');

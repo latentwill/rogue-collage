@@ -1,0 +1,17 @@
+{
+  "id": "replicate-real-esrgan",
+  "name": "Real-ESRGAN \u00b7 quality upscale",
+  "provider": "replicate",
+  "operation": "upscale",
+  "model": "nightmareai/real-esrgan",
+  "inputs": {
+    "scale": 2,
+    "face_enhance": false
+  },
+  "bindings": {
+    "image": "image",
+    "scale": "scale"
+  },
+  "resolve_version": true,
+  "source": "https://replicate.com/nightmareai/real-esrgan/api"
+}

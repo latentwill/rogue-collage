@@ -1,0 +1,68 @@
+/* Static printed-ink chrome. Artwork/export never receives these effects. */
+:root{--accent:#06d8b0;--on-accent:#032820;--focus:#66efd7;--selected:#133b36;--ink-edge-opacity:.72}
+html[data-theme=light]{--accent:#006f61;--on-accent:#fff;--focus:#006f61;--selected:#d3ebe6;--ink-edge-opacity:.44}
+.app{padding:6px;border:1px solid var(--line);border-radius:14px;position:relative;isolation:isolate;background-color:var(--app);background-image:url('/brand/ink-surface.svg')}
+.app::after{content:"";position:absolute;inset:0;border:1px solid var(--accent);border-radius:14px;pointer-events:none;z-index:8;background:linear-gradient(100deg,#19d5b8,transparent 23%,#958fcb 51%,transparent 75%,#11bd9a);opacity:.6;mask:linear-gradient(#000 0 0) top/100% 2px no-repeat,linear-gradient(#000 0 0) bottom/100% 2px no-repeat,linear-gradient(#000 0 0) left/2px 100% no-repeat,linear-gradient(#000 0 0) right/2px 100% no-repeat}
+.topbar{height:78px;min-height:78px;padding:0 10px;gap:17px;background-image:url('/brand/ink-surface.svg');position:relative}
+.brand{flex:0 0 205px;line-height:0;gap:0}
+.brand-wordmark{display:block;width:205px;height:68px;object-fit:contain}
+.project-title{min-width:80px}
+.top-actions{margin-left:auto}
+.selection-delete{color:var(--error);font-size:11px}
+.rail,.toolbar,.properties,.layers-panel,.dock{background-image:url('/brand/ink-surface.svg')}
+.rail{border:1px solid var(--line);border-radius:7px;margin-right:5px;position:relative;overflow:hidden}
+.rail button{position:relative;z-index:1}
+.rail button.active{background-color:var(--selected);border-color:var(--accent);background-image:url('/brand/ink-edge.svg');background-size:600px 82px}
+.editor{border:1px solid var(--line);border-radius:7px}
+.inspector{margin-left:5px;border:0;gap:5px;background:transparent}
+.properties,.layers-panel{border:1px solid var(--line);border-radius:7px;background-color:var(--panel);position:relative}
+.properties::before,.layers-panel::before,.dock::before,.topbar::before{content:"";position:absolute;inset:0 0 auto;height:55px;background:url('/brand/ink-edge.svg') top left/800px 110px repeat-x;opacity:var(--ink-edge-opacity);pointer-events:none;z-index:0}
+.properties>* , .layers-panel>* , .topbar>*{position:relative}
+.dock{position:relative}
+.dock>header,.dock-body{position:relative}
+.canvas-area{background-image:url('/brand/ink-surface.svg');background-size:600px 600px}
+.canvas-area::after{content:"";position:absolute;inset:0;pointer-events:none;background:url('/brand/ink-edge.svg') left top/800px 110px repeat-x;opacity:.28}
+.asset-item{flex-basis:120px}
+.asset-item .asset{padding-bottom:6px;cursor:grab}
+.asset-item .asset:active{cursor:grabbing}
+.asset-item .asset.selected{background:var(--selected);border-color:var(--accent);outline:1px solid var(--accent);outline-offset:1px}
+.asset-item .asset small{font-size:9px;white-space:normal}
+.asset-tools{min-height:35px}
+html[data-theme=light] .brand-wordmark{filter:drop-shadow(0 1px 1px #08291b55)}
+@media(max-width:1150px){.brand{flex-basis:165px}.brand-wordmark{width:165px;height:60px}.topbar{gap:9px}.project-title{max-width:145px}.selection-delete span{font-size:10px}}
+@media(max-width:850px){.app{padding:3px}.brand{flex-basis:125px}.brand-wordmark{width:125px;height:50px}.topbar{height:60px;min-height:60px;padding:0 5px;gap:5px}.project-title{max-width:105px}.top-actions{gap:3px}.top-actions button{padding:5px}.selection-delete span{display:none}.inspector{margin-left:3px}.rail{margin-right:3px}}
+.dock-body:has(.asset-list){display:flex;flex-direction:column;overflow:hidden}
+.asset-tools{flex-shrink:0}
+.asset-list{flex:1;min-height:0;align-items:flex-start;padding:2px 2px 5px}
+.asset-item .asset{height:auto;min-height:108px}
+.asset-item .asset img{height:65px}
+/* The studio markings live below Konva, never on the artwork/export surface. */
+.canvas-area{isolation:isolate}
+.canvas-area::before{display:none}
+.canvas-area::after{display:none}
+.canvas-stage{position:relative;z-index:1}
+.canvas-empty{z-index:2}
+html[data-theme=light] .pasteboard-artwork{filter:brightness(.45);opacity:.22}
+.rail button.active,.tool-buttons button.active,.tabs button.active,.top-actions button.primary{position:relative;overflow:visible}
+.rail button.active::after,.tool-buttons button.active::after,.tabs button.active::after,.top-actions button.primary::after{content:"";position:absolute;top:calc(100% - 2px);left:4px;width:calc(100% - 8px);height:13px;background:var(--accent);mask:url('/brand/paint-drips.svg') center/100% 100% no-repeat;pointer-events:none;transform-origin:top;animation:paint-settle .42s cubic-bezier(.16,1,.3,1) both;opacity:.8;z-index:2}
+.tool-buttons button.active::after{height:8px}
+.tabs button.active::after{height:7px}
+@keyframes paint-settle{from{transform:scaleY(.15)}to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.rail button.active::after,.tool-buttons button.active::after,.tabs button.active::after,.top-actions button.primary::after{animation:none}}
+
+.text-controls>label{margin-bottom:10px}.text-controls details{margin-top:12px}.text-controls details>label,.text-controls details>.number-grid{margin-top:9px}
+
+.pasteboard-artwork{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.32;overflow:hidden}
+.pasteboard-artwork img{position:absolute;width:28%;max-width:380px;height:45%;max-height:238px;object-fit:contain;pointer-events:none;user-select:none}
+.pasteboard-artwork .top-left{top:0;left:0;object-position:left top}
+.pasteboard-artwork .top-right{top:0;right:0;object-position:right top}
+.pasteboard-artwork .bottom-left{bottom:0;left:0;object-position:left bottom}
+.pasteboard-artwork .bottom-right{bottom:0;right:0;object-position:right bottom}
+/* Fade away paint truncated by the two right-hand crop boundaries. */
+.pasteboard-artwork .top-right{mask-image:linear-gradient(to bottom,#000 70%,transparent 96%)}
+.pasteboard-artwork .bottom-right{mask-image:linear-gradient(to bottom,transparent 4%,#000 30%)}
+/* The asset library fills rows and scrolls down, never sideways. */
+.asset-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(124px,1fr));align-content:start;align-items:start;overflow-x:hidden;overflow-y:auto;gap:9px;padding:3px 3px 8px}
+.asset-item{width:100%;min-width:0}
+.asset-item .asset{width:100%;min-width:0}
+.asset-item .asset img{max-width:100%}

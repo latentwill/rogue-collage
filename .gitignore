@@ -1,0 +1,26 @@
+.DS_Store
+node_modules/
+.venv/
+__pycache__/
+dist/
+.env
+.env.*
+!.env.example
+models/
+runtime-data/
+*.tsbuildinfo
+server/data/
+server/workflows/user/
+work/
+.impeccable/review/
+
+# Personal exports, credentials, and locally curated catalogs
+*.collage.zip
+*.log
+*.pem
+*.key
+memory.md
+final-models.json
+private/
+research/
+docs/design-references/

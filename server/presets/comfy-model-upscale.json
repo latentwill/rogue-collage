@@ -1,0 +1,51 @@
+{
+  "id": "comfy-model-upscale",
+  "name": "ComfyUI \u00b7 model upscale",
+  "provider": "comfyui",
+  "operation": "upscale",
+  "workflow": {
+    "1": {
+      "class_type": "LoadImage",
+      "inputs": {
+        "image": ""
+      }
+    },
+    "2": {
+      "class_type": "UpscaleModelLoader",
+      "inputs": {
+        "model_name": "4x-UltraSharp.pth"
+      }
+    },
+    "3": {
+      "class_type": "ImageUpscaleWithModel",
+      "inputs": {
+        "upscale_model": [
+          "2",
+          0
+        ],
+        "image": [
+          "1",
+          0
+        ]
+      }
+    },
+    "4": {
+      "class_type": "SaveImage",
+      "inputs": {
+        "images": [
+          "3",
+          0
+        ],
+        "filename_prefix": "RogueCollage-upscale"
+      }
+    }
+  },
+  "bindings": {
+    "image": "1.inputs.image",
+    "upscale_model": "2.inputs.model_name"
+  },
+  "output_nodes": [
+    "4"
+  ],
+  "description": "Requires an installed upscale model in ComfyUI models/upscale_models. Defaults to 4x-UltraSharp.pth; change in preset JSON."
+}

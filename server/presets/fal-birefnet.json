@@ -1,0 +1,15 @@
+{
+  "id": "fal-birefnet",
+  "name": "BiRefNet \u00b7 background removal",
+  "provider": "fal",
+  "operation": "cutout",
+  "model": "fal-ai/birefnet",
+  "inputs": {
+    "model": "General Use (Heavy)",
+    "output_format": "png"
+  },
+  "bindings": {
+    "image": "image_url"
+  },
+  "source": "https://fal.ai/models/fal-ai/birefnet/api"
+}

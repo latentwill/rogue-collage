@@ -1,0 +1,10 @@
+{
+  "id": "local-cutout-u2net",
+  "name": "Local CPU \u00b7 U\u00b2-Net background removal",
+  "provider": "local",
+  "operation": "cutout",
+  "model": "u2net",
+  "inputs": {},
+  "bindings": {},
+  "description": "First use downloads the 176 MB U\u00b2-Net model. Runs offline on CPU afterward."
+}

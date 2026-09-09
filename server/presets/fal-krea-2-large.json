@@ -1,0 +1,19 @@
+{
+  "id": "fal-krea-2-large",
+  "name": "Krea 2 Large",
+  "provider": "fal",
+  "operation": "generate-piece",
+  "model": "krea/v2/large/text-to-image",
+  "resolution_mode": "aspect-ratio",
+  "inputs": {
+    "creativity": "medium"
+  },
+  "bindings": {
+    "prompt": "prompt",
+    "seed": "seed",
+    "aspect_ratio": "aspect_ratio"
+  },
+  "lora_options": [],
+  "source": "https://fal.ai/models/krea/v2/large/text-to-image/api",
+  "description": "Provider chooses output resolution from the selected aspect ratio."
+}

@@ -1,0 +1,106 @@
+{
+  "id": "comfy-basic-piece",
+  "name": "ComfyUI \u00b7 SD/SDXL pieces",
+  "provider": "comfyui",
+  "operation": "generate-piece",
+  "workflow": {
+    "3": {
+      "class_type": "KSampler",
+      "inputs": {
+        "seed": 0,
+        "steps": 20,
+        "cfg": 7,
+        "sampler_name": "euler",
+        "scheduler": "normal",
+        "denoise": 1,
+        "model": [
+          "4",
+          0
+        ],
+        "positive": [
+          "6",
+          0
+        ],
+        "negative": [
+          "7",
+          0
+        ],
+        "latent_image": [
+          "5",
+          0
+        ]
+      }
+    },
+    "4": {
+      "class_type": "CheckpointLoaderSimple",
+      "inputs": {
+        "ckpt_name": "SELECT_INSTALLED_CHECKPOINT.safetensors"
+      }
+    },
+    "5": {
+      "class_type": "EmptyLatentImage",
+      "inputs": {
+        "width": 1024,
+        "height": 1024,
+        "batch_size": 1
+      }
+    },
+    "6": {
+      "class_type": "CLIPTextEncode",
+      "inputs": {
+        "text": "",
+        "clip": [
+          "4",
+          1
+        ]
+      }
+    },
+    "7": {
+      "class_type": "CLIPTextEncode",
+      "inputs": {
+        "text": "",
+        "clip": [
+          "4",
+          1
+        ]
+      }
+    },
+    "8": {
+      "class_type": "VAEDecode",
+      "inputs": {
+        "samples": [
+          "3",
+          0
+        ],
+        "vae": [
+          "4",
+          2
+        ]
+      }
+    },
+    "9": {
+      "class_type": "SaveImage",
+      "inputs": {
+        "images": [
+          "8",
+          0
+        ],
+        "filename_prefix": "RogueCollage"
+      }
+    }
+  },
+  "bindings": {
+    "prompt": "6.inputs.text",
+    "negative_prompt": "7.inputs.text",
+    "seed": "3.inputs.seed",
+    "steps": "3.inputs.steps",
+    "checkpoint": "4.inputs.ckpt_name",
+    "width": "5.inputs.width",
+    "height": "5.inputs.height"
+  },
+  "auto_checkpoint": true,
+  "output_nodes": [
+    "9"
+  ],
+  "description": "Uses the first installed SD/SDXL checkpoint unless checkpoint is supplied. FLUX requires an imported workflow."
+}

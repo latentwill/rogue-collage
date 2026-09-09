@@ -1,0 +1,17 @@
+<!doctype html><title>Editable text checks</title><pre id="result">Running…</pre><script type="module">
+import JSZip from 'jszip';
+import {createTextLayer,updateTextLayer,validateText} from '/src/textLayers.ts';
+import {layerBitmap,renderProject,importBundle} from '/src/editorUtils.ts';
+const assert=(ok,why)=>{if(!ok)throw Error(why)};
+try {
+let l=createTextLayer(1024,768);l={...l,...updateTextLayer(l,{content:'CREATE\nMIX MISCHIEF',fontSize:72,outlineWidth:3})};
+validateText(l.text);const base=await layerBitmap(l);const data=base.getContext('2d').getImageData(0,0,base.width,base.height).data;assert(data.some((v,i)=>i%4===3&&v>0),'Text has visible pixels');assert(data[3]===0,'Bitmap corners transparent');
+const count=c=>Array.from(c.getContext('2d').getImageData(0,0,c.width,c.height).data).filter((v,i)=>i%4===3&&v>0).length;
+const glowing={...l,...updateTextLayer(l,{glowRadius:12,shadowBlur:6,shadowX:14,shadowY:18})};const fx=await layerBitmap(glowing);assert(count(fx)>count(base),'Effects expand text coverage');
+const scaled={...glowing,width:glowing.width*2,height:glowing.height*2};assert((await layerBitmap(scaled)).width===Math.round(glowing.width*2),'Transform scales bitmap');assert(scaled.text.fontSize===72,'Transform preserves editable logical font size');
+const p={id:'text-test',name:'Text test',width:1024,height:768,background:'transparent',layers:[glowing],snippets:[],revision:0};
+const flat=await renderProject(p);const large=new Image();large.src=await renderProject(p,undefined,4096);await large.decode();assert(large.naturalWidth===4096,'4K export resolution');const zip=new JSZip();zip.file('project.json',JSON.stringify({version:1,project:p,history:[{project:p,label:'Add text',at:0}]}));zip.file('final.png',await(await fetch(flat)).blob());const file=new File([await zip.generateAsync({type:'blob'})],'text.collage.zip');const restored=await importBundle(file);assert(JSON.stringify(restored.project.layers[0].text)===JSON.stringify(glowing.text),'ZIP import retains all editable text and effects');assert(await renderProject(restored.project)===flat,'Imported project renders identically');
+const bad=new JSZip();bad.file('project.json',JSON.stringify({version:1,project:{...p,layers:[{...glowing,text:{...glowing.text,fontSize:-10}}]}}));let rejected=false;try{await importBundle(new File([await bad.generateAsync({type:'blob'})],'bad.zip'))}catch{rejected=true}assert(rejected,'Invalid text rejected');
+document.getElementById('result').textContent='PASS: visible text, transparent bitmap, outline/glow/shadow pixels, scaled text, editable ZIP round trip, identical export, invalid import rejection';document.body.append(base,fx);
+}catch(e){document.getElementById('result').textContent='FAIL: '+e.stack}
+</script>

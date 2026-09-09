@@ -1,0 +1,10 @@
+{
+  "id": "local-upscale-lanczos",
+  "name": "Local CPU \u00b7 Lanczos upscale (non-AI)",
+  "provider": "local",
+  "operation": "upscale",
+  "model": "lanczos",
+  "inputs": {},
+  "bindings": {},
+  "description": "CPU Lanczos resampling with light sharpening. Preserves transparency; does not invent detail."
+}

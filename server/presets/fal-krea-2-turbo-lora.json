@@ -1,0 +1,21 @@
+{
+  "id": "fal-krea-2-turbo-lora",
+  "name": "Krea 2 Turbo \u00b7 LoRA",
+  "provider": "fal",
+  "operation": "generate-piece",
+  "model": "fal-ai/krea-2/turbo/lora",
+  "resolution_mode": "pixels",
+  "inputs": {
+    "output_format": "png"
+  },
+  "bindings": {
+    "prompt": "prompt",
+    "seed": "seed",
+    "width": "image_size.width",
+    "height": "image_size.height",
+    "loras": "loras"
+  },
+  "lora_options": [],
+  "source": "https://fal.ai/models/fal-ai/krea-2/turbo/lora/api",
+  "description": "Custom resolution and compatible Krea 2 LoRA weights. Add your LoRA choices in Settings \u2192 Models."
+}

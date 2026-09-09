@@ -1,0 +1,21 @@
+{
+  "id": "replicate-sdxl-composition",
+  "name": "SDXL \u00b7 composition pass",
+  "provider": "replicate",
+  "operation": "generate-composition",
+  "model": "stability-ai/sdxl",
+  "inputs": {
+    "prompt": "",
+    "prompt_strength": 0.55,
+    "num_outputs": 1
+  },
+  "bindings": {
+    "prompt": "prompt",
+    "image": "image",
+    "mask": "mask",
+    "denoise": "prompt_strength",
+    "seed": "seed"
+  },
+  "resolve_version": true,
+  "source": "https://replicate.com/stability-ai/sdxl/api"
+}

@@ -1,0 +1,74 @@
+{
+  "id": "comfy-birefnet",
+  "name": "ComfyUI \u00b7 BiRefNet cutout",
+  "provider": "comfyui",
+  "operation": "cutout",
+  "description": "Requires recent ComfyUI with native RemoveBackground and models/background_removal/birefnet.safetensors. No custom nodes.",
+  "source": "https://github.com/Comfy-Org/workflow_templates/blob/main/templates/utility_birefnet_remove_background.json",
+  "workflow": {
+    "1": {
+      "class_type": "LoadImage",
+      "inputs": {
+        "image": ""
+      }
+    },
+    "2": {
+      "class_type": "LoadBackgroundRemovalModel",
+      "inputs": {
+        "bg_removal_name": "birefnet.safetensors"
+      }
+    },
+    "3": {
+      "class_type": "RemoveBackground",
+      "inputs": {
+        "image": [
+          "1",
+          0
+        ],
+        "bg_removal_model": [
+          "2",
+          0
+        ]
+      }
+    },
+    "4": {
+      "class_type": "InvertMask",
+      "inputs": {
+        "mask": [
+          "3",
+          0
+        ]
+      }
+    },
+    "5": {
+      "class_type": "JoinImageWithAlpha",
+      "inputs": {
+        "image": [
+          "1",
+          0
+        ],
+        "alpha": [
+          "4",
+          0
+        ]
+      }
+    },
+    "6": {
+      "class_type": "SaveImage",
+      "inputs": {
+        "images": [
+          "5",
+          0
+        ],
+        "filename_prefix": "RogueCollage-cutout"
+      }
+    }
+  },
+  "bindings": {
+    "image": "1.inputs.image",
+    "background_model": "2.inputs.bg_removal_name"
+  },
+  "output_nodes": [
+    "6"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "id": "fal-flux-composition",
+  "name": "FLUX Dev \u00b7 composition pass",
+  "provider": "fal",
+  "operation": "generate-composition",
+  "model": "fal-ai/flux/dev/image-to-image",
+  "inputs": {
+    "prompt": "",
+    "strength": 0.55,
+    "num_inference_steps": 28,
+    "output_format": "png"
+  },
+  "bindings": {
+    "prompt": "prompt",
+    "image": "image_url",
+    "denoise": "strength",
+    "seed": "seed"
+  },
+  "source": "https://fal.ai/models/fal-ai/flux/dev/image-to-image/api"
+}

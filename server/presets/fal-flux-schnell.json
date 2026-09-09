@@ -1,0 +1,23 @@
+{
+  "id": "fal-flux-schnell",
+  "name": "FLUX Schnell \u00b7 generate pieces",
+  "provider": "fal",
+  "operation": "generate-piece",
+  "model": "fal-ai/flux/schnell",
+  "inputs": {
+    "prompt": "",
+    "image_size": {
+      "width": 1024,
+      "height": 1024
+    },
+    "num_images": 1,
+    "output_format": "png"
+  },
+  "bindings": {
+    "prompt": "prompt",
+    "width": "image_size.width",
+    "height": "image_size.height",
+    "seed": "seed"
+  },
+  "source": "https://fal.ai/models/fal-ai/flux/schnell/api"
+}

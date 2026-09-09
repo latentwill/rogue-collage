@@ -1,0 +1,17 @@
+{
+  "id": "replicate-flux-schnell",
+  "name": "FLUX Schnell \u00b7 generate pieces",
+  "provider": "replicate",
+  "operation": "generate-piece",
+  "model": "black-forest-labs/flux-schnell",
+  "inputs": {
+    "prompt": "",
+    "aspect_ratio": "1:1",
+    "output_format": "png"
+  },
+  "bindings": {
+    "prompt": "prompt",
+    "seed": "seed"
+  },
+  "source": "https://replicate.com/black-forest-labs/flux-schnell/api"
+}
