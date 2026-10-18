@@ -501,18 +501,39 @@ async def lifespan(app):
         pass
 
 
+def parse_allowed_origins(raw: str) -> tuple[str, ...]:
+    """Extra browser origins to trust besides localhost, e.g. a private tailnet URL.
+
+    COLLAGE_ALLOWED_ORIGINS takes comma-separated origins such as
+    https://machine.tailnet.ts.net:8446. Entries with a path, query or no host are ignored.
+    """
+    origins = []
+    for item in raw.split(','):
+        item = item.strip().rstrip('/')
+        if not item:
+            continue
+        parsed = urlparse(item)
+        if parsed.scheme in ('http', 'https') and parsed.hostname and not parsed.path and not parsed.query and not parsed.fragment:
+            origins.append(f'{parsed.scheme}://{parsed.netloc}'.lower())
+    return tuple(dict.fromkeys(origins))
+
+
+LOCAL_ORIGINS = ('http://localhost:5174', 'http://127.0.0.1:5174', 'http://localhost:4173', 'http://127.0.0.1:4173')
+EXTRA_ORIGINS = parse_allowed_origins(os.environ.get('COLLAGE_ALLOWED_ORIGINS', ''))
+EXTRA_HOSTS = tuple(urlparse(origin).hostname for origin in EXTRA_ORIGINS)
+
 app = FastAPI(title='Rogue Collage local API', lifespan=lifespan)
-app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:5174', 'http://127.0.0.1:5174', 'http://localhost:4173', 'http://127.0.0.1:4173'], allow_methods=['GET', 'POST', 'PUT', 'DELETE'], allow_headers=['Content-Type'])
+app.add_middleware(CORSMiddleware, allow_origins=[*LOCAL_ORIGINS, *EXTRA_ORIGINS], allow_methods=['GET', 'POST', 'PUT', 'DELETE'], allow_headers=['Content-Type'])
 
 
 @app.middleware('http')
 async def local_access(request: Request, call_next):
     # Block hostile web pages from writing to the loopback service (CORS alone isn't enough).
     origin = request.headers.get('origin')
-    if origin and origin not in ('http://localhost:5174', 'http://127.0.0.1:5174', 'http://localhost:4173', 'http://127.0.0.1:4173', 'http://localhost:8765', 'http://127.0.0.1:8765'):
+    if origin and origin not in (*LOCAL_ORIGINS, 'http://localhost:8765', 'http://127.0.0.1:8765', *EXTRA_ORIGINS):
         from fastapi.responses import JSONResponse
         return JSONResponse({'detail': 'Only the local editor may access this service'}, status_code=403)
-    if request.headers.get('host', '').split(':')[0] not in ('localhost', '127.0.0.1', 'testserver'):
+    if request.headers.get('host', '').split(':')[0] not in ('localhost', '127.0.0.1', 'testserver', *EXTRA_HOSTS):
         from fastapi.responses import JSONResponse
         return JSONResponse({'detail': 'Invalid local host'}, status_code=403)
     return await call_next(request)

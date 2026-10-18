@@ -61,6 +61,17 @@ The local backend stores settings, generation jobs and downloaded outputs under 
 
 Do not expose this development server to the public internet. The app is designed for a single user on localhost.
 
+### Private remote access (optional)
+
+To open the editor from your other devices over a private network such as a Tailscale tailnet, set `COLLAGE_ALLOWED_ORIGINS` before launch to the exact origin you will browse from (comma-separated for several):
+
+```sh
+COLLAGE_ALLOWED_ORIGINS=https://my-mac.tailnet-name.ts.net:8446 ./start.command
+tailscale serve --bg --https=8446 http://127.0.0.1:5174   # tailnet only; never use funnel
+```
+
+Both the editor (Vite `allowedHosts`) and the local API (origin and host checks) accept that origin in addition to localhost; every other origin is still refused. Leave it unset for localhost-only use.
+
 ## Documentation
 
 - [Image models and LoRAs](docs/image-models.md)

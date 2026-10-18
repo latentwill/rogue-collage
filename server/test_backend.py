@@ -37,6 +37,23 @@ class BackendContract(unittest.TestCase):
                 self.assertEqual(r.status_code,403)
         asyncio.run(check())
 
+    def test_allowed_origins_parsing(self):
+        self.assertEqual(m.parse_allowed_origins(''), ())
+        self.assertEqual(m.parse_allowed_origins(' https://Mac.Tail.ts.net:8446/ , https://mac.tail.ts.net:8446,*,ftp://x,https://a.example/path,http://b.example?q=1 '), ('https://mac.tail.ts.net:8446',))
+
+    def test_configured_remote_origin_is_trusted_and_others_are_not(self):
+        async def check():
+            async with RealClient(transport=httpx.ASGITransport(app=m.app), base_url='http://localhost:8765') as c:
+                self.assertEqual((await c.put('/api/settings',headers={'origin':'https://mac.tail.ts.net:8446'},json={'paused':True})).status_code,403)
+                with patch.object(m,'EXTRA_ORIGINS',('https://mac.tail.ts.net:8446',)), patch.object(m,'EXTRA_HOSTS',('mac.tail.ts.net',)):
+                    self.assertEqual((await c.put('/api/settings',headers={'origin':'https://mac.tail.ts.net:8446'},json={'paused':True})).status_code,200)
+                    self.assertEqual((await c.put('/api/settings',headers={'origin':'https://other.tail.ts.net:8446'},json={'paused':True})).status_code,403)
+            async with RealClient(transport=httpx.ASGITransport(app=m.app), base_url='http://mac.tail.ts.net') as c:
+                self.assertEqual((await c.get('/api/health')).status_code,403)
+                with patch.object(m,'EXTRA_ORIGINS',('https://mac.tail.ts.net:8446',)), patch.object(m,'EXTRA_HOSTS',('mac.tail.ts.net',)):
+                    self.assertEqual((await c.get('/api/health')).status_code,200)
+        asyncio.run(check())
+
     def test_all_presets_validate_and_bind_without_mutating(self):
         presets, errors=m.presets(); self.assertFalse(errors)
         self.assertEqual(len(presets),16)
